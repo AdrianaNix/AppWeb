@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout}"
+      lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Pedidos – Electrosa</title>
+        <link rel="stylesheet" th:href="@{/assets/css/practica6.css}">
+    </head>
+    <body>
+        <main layout:fragment="main-content" class="perfil-container">
+            <aside class="sidebar">
+                <ul>
+                    <li><img th:src="@{/assets/images/areacliente/compras.png}" alt=""> <a th:href="@{/cliente/pedidos}"> COMPRAS REALIZADAS</a></li>
+                    <li><img th:src="@{/assets/images/areacliente/pedidosAnulados.png}" alt=""><a th:href="@{/cliente/pedidos/anulados}">PEDIDOS ANULADOS</a></li>
+                    <li><img th:src="@{/assets/images/areacliente/datos.png}" alt=""> DATOS PERSONALES</li>
+                    <li><img th:src="@{/assets/images/areacliente/favoritos.png}" alt=""> <a th:href="@{/cliente/pedidos}">FAVORITOS</a></li>
+                    <li><img th:src="@{/assets/images/areacliente/cerrarSesion.png}" alt=""> <a th:href="@{/auth/logout}">CERRAR SESIÓN</a></li>
+                </ul>
+            </aside>
+
+            <section class="general-content">
+                <h1 class="page-title">Pedidos anulados</h1>
+
+                <div class="list">
+                    <div class="item" th:each="p : ${anulados}">
+                        <div class="icon">
+                            <img th:src="@{/assets/images/areacliente/anulados.png}" alt="">
+                        </div>
+                        <div class="info">
+                            <div class="pedido-header">
+                                <a th:href="@{/cliente/pedidos/anulados/{c}(c=${p.codigo})}">
+                                    <h2 th:text="${p.codigo}">P000010-25</h2>
+                                </a>
+                            </div>
+                            <p>
+                                <strong>Fecha:</strong>
+                                <span th:text="${#dates.format(p.fechacierre,'dd/MM/yyyy')}">  </span>
+                            </p>
+                            <p>
+                                <strong>Fecha anulación:</strong>
+                                <span th:text="${#dates.format(p.fechaanulacion,'dd/MM/yyyy')}"> </span>
+                            </p>
+                        </div>
+                        <div class="anulado-status">
+                            <span>ANULADO</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </body>
+</html>

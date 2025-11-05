@@ -1,0 +1,168 @@
+<!-- src/main/webapp/WEB-INF/views/thymeleaf/ficha.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      lang="es">
+
+    <head>
+        <title th:text="${articulo.nombre} + ' – Electrosa'">Ficha de Producto – Electrosa</title>
+        <link rel="stylesheet" th:href="@{/assets/css/practica6.css}">
+         <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+    </head>
+
+    <body>
+        <main layout:fragment="main-content">
+            <div class="product-container">
+                <div class="container">
+                    <div class="product-box">
+                        <!-- PRODUCTO DESTACADO -->
+                        <div class="product-featured">
+                            <h1 class="title" th:text="${articulo.nombre}">Nombre del artículo</h1>
+
+                            <div class="showcase-wrapper">
+                                <div class="showcase-container">
+                                    <div class="showcase">
+                                        <!-- Imagen -->
+                                        <div class="showcase-banner">
+                                            <img th:src="@{/assets/images/store/{foto}(foto=${articulo.foto})}"
+                                                 th:alt="${articulo.nombre}"
+                                                 class="showcase-img"
+                                                 style="min-height: 250px;">
+                                        </div>
+
+                                        <!-- Detalles -->
+                                        <div class="showcase-content">
+
+                                            <!-- Puntuación -->
+                                            <div class="showcase-rating">
+                                                <span th:each="i : ${#numbers.sequence(1, articulo.rating)}">
+                                                    <ion-icon name="star"></ion-icon>
+                                                </span>
+                                                <span th:each="i : ${#numbers.sequence(articulo.rating + 1, 5)}">
+                                                    <ion-icon name="star-outline"></ion-icon>
+                                                </span>
+                                            </div>
+
+                                            <a href="#">
+                                                <h3 class="showcase-title" th:text="${articulo.nombre}">Nombre del artículo</h3>
+                                            </a>
+
+                                            <p class="showcase-desc" th:text="${articulo.descripcion}">
+                                                Descripción del artículo
+                                            </p>
+
+                                            <!-- Precio -->
+                                            <div id="price-box-wrapper">
+                                                <div class="price-box">
+                                                    <p class="price" th:text="${articulo.pvp} + '€'">0.00€</p>
+                                                </div>
+                                            </div>
+
+                                            <!-- Formulario de añadir al carrito -->
+                                            <form th:action="@{/cliente/cesta}" method="post">
+                                                <input type="hidden" name="returnURL"
+                                                       th:value="@{/catalogo/{articleId}(articleId=${articulo.codigo})}" />
+                                                <input type="hidden" name="codigoArticulo" th:value="${articulo.codigo}" />
+                                                <button class="add-cart-btn">Añadir al carrito</button>
+                                            </form>
+
+                                            <!-- Estado del producto -->
+                                            <div class="showcase-status">
+                                                <div class="wrapper">
+                                                    <p>Vendido hoy: <b><span id="soldToday">0</span></b></p>
+                                                    <p>Disponible: <b th:text="${articulo.stock}">0</b></p>
+                                                </div>
+                                                <div class="showcase-status-bar"></div>
+                                            </div>
+
+                                            <!-- Oferta Flash (dinámica con JavaScript) -->
+                                            <div id="oferta-flash">
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- end featured -->
+                    </div>
+
+                    <!-- Barra lateral -->
+                    <div class="sidebar showcase-container"
+                         style="border: 1px solid var(--cultured); border-radius: var(--border-radius-md);
+                         padding: 10px; margin-top: 88px; color: var(--sonic-silver);
+                         font-size: var(--fs-7); font-weight: var(--weight-300);">
+                        <div style="margin: 14px 0;">
+                            <ion-icon name="stopwatch-outline" style="display: inline-block"></ion-icon>
+                            Entrega en 3 a 4 días laborables
+                        </div>
+                        <div style="margin: 14px 0;">
+                            <ion-icon name="cube-outline" style="display: inline-block"></ion-icon>
+                            Gastos de envío €0,00
+                        </div>
+                        <div style="margin: 14px 0;">
+                            <ion-icon name="checkmark-circle-outline" style="display: inline-block"></ion-icon>
+                            Artículo con 100 días de <a href="#" style="color: var(--salmon-pink);">Satisfacción Garantizada</a>.
+                        </div>
+                        <div style="margin:14px 0;">
+                            <ion-icon name="gift-outline"style="display: inline-block"></ion-icon>
+                            <a href="#"
+                               id="descubrir-oferta"
+                               th:attr="data-id=${articulo.codigo}"
+                               style="color: var(--salmon-pink);">
+                                Descubrir oferta
+                            </a>
+                        </div>
+                        <div style="margin: 14px 0;">
+                            <ion-icon name="cube-outline" style="display: inline-block"></ion-icon>
+                            Stock en 5 almacenes
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Plantilla de oferta flash (Handlebars) -->
+            <script id="ofertaFlashTemplate" type="text/x-handlebars-template">
+                <div class="price-box">
+                <p class="price">{{oferta.precioOfertado}}&euro;</p>
+                <del id="original-price">{{oferta.precioOriginal}}&euro;</del>
+                </div>
+
+                <div class="showcase-status">
+                <p class="countdown-desc">
+                Al comprar {{oferta.cantidadComprada}} pagas {{oferta.cantidadPagada}}
+                </p>
+                </div>
+            </script>
+
+            <!-- Plantilla de cuenta regresiva (Handlebars) -->
+            <script id="countdownTemplate" type="text/x-handlebars-template">
+                <div class="countdown-box" style="display: block;">
+                <p class="countdown-desc">La oferta termina en</p>
+                <div class="countdown">
+                <div class="countdown-content">
+                <p class="display-number">{{oferta.vigenciaDias}}</p>
+                <p class="display-text">días</p>
+                </div>
+                <div class="countdown-content">
+                <p class="display-number">{{oferta.vigenciaHoras}}</p>
+                <p class="display-text">horas</p>
+                </div>
+                <div class="countdown-content">
+                <p class="display-number">{{oferta.vigenciaMinutos}}</p>
+                <p class="display-text">min</p>
+                </div>
+                <div class="countdown-content">
+                <p class="display-number">{{oferta.vigenciaSegundos}}</p>
+                <p class="display-text">seg</p>
+                </div>
+                </div>
+                </div>
+            </script>
+
+        </main>
+        <th:block th:fragment="body-bottom">
+<script th:src="@{/assets/js/practica9_oferta.js}"></script>
+ </th:block>
+    </body>
+</html>

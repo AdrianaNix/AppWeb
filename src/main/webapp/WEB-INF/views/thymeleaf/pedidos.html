@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout}"
+      lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Pedidos – Electrosa</title>
+        <link rel="stylesheet" th:href="@{/assets/css/practica6.css}">
+    </head>
+    <body>
+        <main layout:fragment="main-content" class="perfil-container">
+            <aside class="sidebar">
+                <ul>
+                    <li><img th:src="@{/assets/images/areacliente/compras.png}" alt=""> <a th:href="@{/cliente/pedidos}"> COMPRAS REALIZADAS</a></li>
+                    <li><img th:src="@{/assets/images/areacliente/pedidosAnulados.png}" alt=""><a th:href="@{/cliente/pedidos/anulados}">PEDIDOS ANULADOS</a></li>
+                    <li><img th:src="@{/assets/images/areacliente/datos.png}" alt=""> DATOS PERSONALES</li>
+                    <li><img th:src="@{/assets/images/areacliente/favoritos.png}" alt=""> <a th:href="@{/cliente/pedidos}">FAVORITOS</a></li>
+                    <li><img th:src="@{/assets/images/areacliente/cerrarSesion.png}" alt=""> <a th:href="@{/auth/logout}">CERRAR SESIÓN</a></li>
+                </ul>
+            </aside>
+
+            <section class="general-content">
+                <h1 class="page-title">Compras realizadas</h1>
+
+                <div class="list">
+                    <div class="item" th:each="pedido : ${pedidos}">
+                        <div class="icon">
+                            <img th:src="@{/assets/images/areacliente/pedido.png}" alt="">
+                        </div>
+                        <div class="info">
+
+                            <!-- Cabecera: código -->
+                            <div class="pedido-header">
+                                <a th:href="@{/cliente/pedidos/{c}(c=${pedido.codigo})}">
+                                    <h2 th:text="${pedido.codigo}">codigo de pedido</h2>
+                                </a>
+                            </div>
+
+                            <!-- Cuerpo: fecha, dirección, importe -->
+                            <p>
+                                Fecha:
+                                <span th:text="${#dates.format(pedido.fechacierre, 'dd/MM/yyyy HH:mm')}">
+                                </span>
+                            </p>
+
+                            <p>Dirección de entrega:
+                                <span th:text="${pedido.direccion.calle}">Calle</span>
+
+                            </p>
+
+                            <p th:text="${pedido.direccion.ciudad}">Ciudad</p>
+                            <p th:text="|${pedido.direccion.cp} (${pedido.direccion.provincia})|">Provincia)</p>
+
+                            <p>
+                                Importe:
+                                <span th:text="${pedido.importe} + '€'">1332.5€</span>
+                            </p>
+
+                        </div>
+
+                        <!-- Estado -->
+                        <div class="pedido-status">
+                            <span th:text="${pedido.cursado==0 ? 'PENDIENTE' : 'COMPLETADO'}">PENDIENTE</span>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+        </main>
+    </body>
+</html>

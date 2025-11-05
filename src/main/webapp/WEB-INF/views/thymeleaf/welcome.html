@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      lang="es"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Bienvenida – Electrosa</title>
+</head>
+<body>
+    <main layout:fragment="main-content">
+        <div class="product-container">
+            <div class="container">
+                <div class="product-box">
+                    <div class="product-featured">
+                        <h1 class="title">Área de clientes</h1>
+                        <p>
+                            Gracias por registrarse en Electrosa,
+                            <span th:text="${clienteRegistrado.nombre}">[Nombre]</span>. En unos momentos recibirá un correo electrónico de confirmacion del registro como nuevo cliente.
+                        </p>
+                     
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <th:block layout:fragment="body-bottom">
+        <script th:src="@{/assets/js/practica7.js}"></script>
+    </th:block>
+</body>
+</html>
+

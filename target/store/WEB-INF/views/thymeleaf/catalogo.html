@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      th:lang="${#locale.language}">
+    <head>
+        <meta charset="UTF-8">
+        <title th:text="#{catalog.title}">Catálogo de productos</title>
+        <link rel="stylesheet" th:href="@{/assets/css/practica6.css}">
+        <link rel="stylesheet" th:href="@{/assets/css/practica7.css}">
+    </head>
+    <body>
+        <main layout:fragment="main-content">
+
+            <div class="product-container">
+                <div class="container">
+
+                    <!-- SIDEBAR CON FILTROS -->
+                    <div class="sidebar has-scrollbar" data-mobile-menu>
+                        <div class="sidebar-category" style="margin-top:90px;">
+                            <div class="sidebar-top">
+                                <h2 class="sidebar-title" th:text="#{filters.title}">Filtros de búsqueda</h2>
+                                <button class="sidebar-close-btn" data-mobile-menu-close-btn>
+                                    <ion-icon name="close-outline"></ion-icon>
+                                </button>
+                            </div>
+                            <form th:action="@{/catalogo}" method="get" class="form-cultured">
+                                <input type="hidden" name="p" th:value="${currentPage}" />
+
+                                <!-- Fabricante -->
+                                <div class="control">
+                                    <label for="fabricante" th:text="#{filters.brand.title}">Fabricante:</label>
+                                    <select id="fabricante" name="fabricante">
+                                        <option value="-1"
+                                                th:text="#{filters.options.any}"
+                                                th:selected="${fabricante=='-1'}">-- Cualquiera --</option>
+                                        <option value="Edesa" th:selected="${fabricante=='Edesa'}">Edesa</option>
+                                        <option value="Fagor" th:selected="${fabricante=='Fagor'}">Fagor</option>
+                                        <option value="Miele" th:selected="${fabricante=='Miele'}">Miele</option>
+                                    </select>
+                                </div>
+
+                                <!-- Tipo -->
+                                <div class="control">
+                                    <label for="tipo" th:text="#{filters.category.title}">Tipo:</label>
+                                    <select id="tipo" name="tipo">
+                                        <!-- “Any” ya lo tenías internacionalizado -->
+                                        <option value="-1"
+                                                th:text="#{filters.options.any}"
+                                                th:selected="${tipo=='-1'}">-- Cualquiera --</option>
+
+                                        <!-- Ahora cada opción con th:text -->
+                                        <option value="Aspirador"
+                                                th:text="#{filters.category.options.aspirator}"
+                                                th:selected="${tipo=='Aspirador'}">Aspirador</option>
+
+                                        <option value="Campana"
+                                                th:text="#{filters.category.options.hood}"
+                                                th:selected="${tipo=='Campana'}">Campana</option>
+
+                                        <option value="Frigorifico"
+                                                th:text="#{filters.category.options.fridge}"
+                                                th:selected="${tipo=='Frigorifico'}">Frigorífico</option>
+
+                                        <option value="Horno"
+                                                th:text="#{filters.category.options.oven}"
+                                                th:selected="${tipo=='Horno'}">Horno</option>
+
+                                        <option value="Lavadora"
+                                                th:text="#{filters.category.options.washer}"
+                                                th:selected="${tipo=='Lavadora'}">Lavadora</option>
+
+                                        <option value="Lavavajillas"
+                                                th:text="#{filters.category.options.dishwasher}"
+                                                th:selected="${tipo=='Lavavajillas'}">Lavavajillas</option>
+
+                                        <option value="Microondas"
+                                                th:text="#{filters.category.options.microwave}"
+                                                th:selected="${tipo=='Microondas'}">Microondas</option>
+
+                                        <option value="Placa"
+                                                th:text="#{filters.category.options.hob}"
+                                                th:selected="${tipo=='Placa'}">Placa</option>
+                                    </select>
+                                </div>
+
+
+                                <!-- Precio -->
+                                <div class="control">
+                                    <label for="precio" th:text="#{filters.price.title}">Precio:</label>
+                                    <select id="precio" name="precio">
+                                        <option value="-1"
+                                                th:text="#{filters.options.any}"
+                                                th:selected="${precio=='-1'}">-- Cualquiera --</option>
+                                        <option value="10-50"  th:selected="${precio=='10-50'}">10-50 €</option>
+                                        <option value="50-100" th:selected="${precio=='50-100'}">50-100 €</option>
+                                    </select>
+                                </div>
+
+                                <div style="margin-top:30px;">
+                                    <button class="banner-btn" type="submit">
+                                        <i class="lni lni-search-alt"></i>
+                                        <span th:text="#{filters.button}">Aplicar filtros</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- RESULTADOS -->
+                    <div class="product-box">
+                        <div class="product-main">
+                            <!-- Título -->
+                            <h1 class="title" th:text="#{catalog.title}">Catálogo de productos</h1>
+
+                            <!-- Empty-state -->
+                            <div class="empty-result" th:if="${page.empty}">
+                                <div class="empty-content">
+                                    <h2 th:text="#{catalog.empty.title}">¡Vaya! No hay coincidencias.</h2>
+                                    <p th:text="#{catalog.empty.message}">
+                                        Lo sentimos, no hemos encontrado artículos que encajen con esos filtros.
+                                    </p>
+                                    <div class="empty-actions">
+                                        <a th:href="@{/catalogo}" class="btn-empty"
+                                           th:text="#{catalog.empty.clearFilters}">Borrar filtros</a>
+                                        <a th:href="@{/catalogo(p=1)}" class="btn-empty-secondary"
+                                           th:text="#{catalog.empty.viewAll}">Ver todo el catálogo</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Paginador -->
+                            <div class="paginator-wrapper" th:unless="${page.empty}">
+                                <a th:if="${currentPage>1}"
+                                   th:href="@{/catalogo(p=1, fabricante=${fabricante}, tipo=${tipo}, precio=${precio})}"
+                                   th:text="#{paginator.first}">Primero</a>
+                                <a th:if="${currentPage>1}"
+                                   th:href="@{/catalogo(p=${currentPage-1}, fabricante=${fabricante}, tipo=${tipo}, precio=${precio})}"
+                                   th:text="#{paginator.previous}">Anterior</a>
+
+                                <span class="current"
+                                      th:text="#{paginator.page.current(${currentPage}, ${page.totalPages})}">
+                                    Página 1 de 1
+                                </span>
+
+
+                                <a th:if="${currentPage<page.totalPages}"
+                                   th:href="@{/catalogo(p=${currentPage+1}, fabricante=${fabricante}, tipo=${tipo}, precio=${precio})}"
+                                   th:text="#{paginator.next}">Siguiente</a>
+                                <a th:if="${currentPage<page.totalPages}"
+                                   th:href="@{/catalogo(p=${page.totalPages}, fabricante=${fabricante}, tipo=${tipo}, precio=${precio})}"
+                                   th:text="#{paginator.last}">Último</a>
+                            </div>
+
+                            <!-- Información de total y tamaño de página -->
+                            <div class="pagination-info" th:unless="${page.empty}">
+                                <label th:text="#{paginator.page.size}">Artículos por página:</label>
+                                <span class="pagesize" th:text="${page.numberOfElements}">0</span>
+                                <span class="records-found">
+                                    ([[ #{paginator.page.total(${page.totalElements})} ]])
+                                </span>
+                            </div>
+
+                            <!-- Cuadrícula de productos -->
+                            <div class="product-grid" th:unless="${page.empty}">
+                                <div class="showcase" th:each="articulo : ${page.content}">
+                                    <div class="showcase-banner">
+                                        <a th:href="@{/catalogo/{id}(id=${articulo.codigo})}">
+                                            <img th:src="@{/assets/images/store/{foto}(foto=${articulo.foto})}"
+                                                 th:alt="${articulo.nombre}"
+                                                 class="product-img" style="max-height:150px;"/>
+                                        </a>
+                                        <p class="showcase-badge" th:if="${articulo.rating>4}"
+                                           th:text="${articulo.rating*5 + '%'}">20%</p>
+                                        <div class="showcase-actions">
+                                            <button class="btn-action wishlist-add" th:attr="id=${articulo.codigo}">
+                                                <ion-icon name="heart-outline"></ion-icon>
+                                            </button>
+                                            <button class="btn-action">
+                                                <ion-icon name="eye-outline"></ion-icon>
+                                            </button>
+                                            <button class="btn-action">
+                                                <ion-icon name="bag-add-outline"></ion-icon>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="showcase-content">
+                                        <span class="showcase-code" th:text="${articulo.codigo}">Código</span>
+                                        <a th:href="@{/catalogo/{id}(id=${articulo.codigo})}">
+                                            <h3 class="showcase-title" th:text="${articulo.nombre}">Nombre artículo</h3>
+                                        </a>
+                                        <div class="showcase-rating">
+                                            <span th:each="i : ${#numbers.sequence(1, articulo.rating)}">
+                                                <ion-icon name="star"></ion-icon>
+                                            </span>
+                                            <span th:each="i : ${#numbers.sequence(articulo.rating+1, 5)}">
+                                                <ion-icon name="star-outline"></ion-icon>
+                                            </span>
+                                        </div>
+                                        <div class="price-box">
+                                            <del th:if="${articulo.pvp != null}"
+                                                 th:text="${articulo.pvp} + '€'">0.0€</del>
+                                            <p class="price" th:text="${articulo.pvp} + '€'">0.0€</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </main>
+    </body>
+</html>
+
+

@@ -1,0 +1,90 @@
+#map-container {
+    display: flex;
+    justify-content: center;
+}
+#map {
+                width: 512px;
+                height: 512px;
+            }
+
+
+#btn-geoloc {
+    margin: 1rem auto;
+    display: block;
+    padding: 0.6rem 1.2rem;
+    background-color: var(--salmon-pink);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#btn-geoloc:hover {
+    background-color: black;
+    transform: scale(1.03);
+}
+
+#btn-geoloc:active {
+    transform: scale(0.98);
+}
+
+
+/* Estilos para el contenedor del acordeón */
+.accordion {
+    margin-top: 20px;
+    border-radius: 8px;
+}
+
+/* Encabezado del acordeón */
+.accordion-button {
+    font-weight: bold;
+    background-color: #f8f9fa;
+    color: #0d6efd;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: #e9f0ff;
+    color: #084298;
+}
+
+/* Cuerpo del acordeón */
+.accordion-body {
+    background-color: #ffffff;
+    padding: 15px;
+    border-top: 1px solid #dee2e6;
+}
+
+/* Texto del contenido */
+.accordion-body p {
+    margin: 0 0 0px;
+    line-height: 1.5;
+}
+
+/* Para ajustar márgenes entre items */
+.accordion-item + .accordion-item {
+    border-top: 1px solid #dee2e6;
+}
+
+/* Responsive para pantallas pequeñas */
+@media (max-width: 576px) {
+    .accordion-button {
+        font-size: 14px;
+    }
+
+    .accordion-body {
+        font-size: 14px;
+    }
+}
+
+
+
+/* Icono al lado del enlace mostrar contraseña */
+.pwd-toggle ion-icon {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+}

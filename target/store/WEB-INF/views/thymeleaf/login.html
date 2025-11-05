@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      lang="es">
+    <head>
+        <title>Iniciar sesión – Electrosa</title>
+        <link rel="stylesheet" th:href="@{/assets/css/practica6.css}">
+    </head>
+
+    <main layout:fragment="main-content">
+        <div class="login-wrapper">
+
+            <h1 class="form-title">Área de clientes</h1>
+            <div class="login-container">
+
+
+
+                <div class="login-content">
+
+                    <div class="login-image">
+                        <img th:src="@{/assets/images/20945760.jpg}" alt="Login ilustración" />
+                    </div>
+                    <div class="login-form">
+
+                        <h1>Iniciar sesión</h1>
+                        <form th:action="@{/auth/login}" th:object="${loginForm}" method="post">
+                            <label for="username">Usuario:</label>
+                            <input type="text" th:field="*{username}" id="username" />
+
+                            <label for="password">Contraseña:</label>
+                            <input type="password" th:field="*{password}" id="password" />
+
+                            <p th:if="${loginError}" class="error" th:text="${loginError}"></p>
+
+
+                            <button type="submit" class="btn-login">Iniciar sesión</button>
+                            <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+
+
+                        </form>
+                    </div>
+                </div>
+                <div class="new-account">
+                    <p>¿Aún no tienes cuenta?</p>
+                    <a th:href="@{/auth/register}">Crear cuenta</a>
+                </div>
+            </div>
+        </div>
+
+    </main>

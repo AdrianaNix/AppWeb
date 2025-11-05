@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout}"
+      lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Pedidos – Electrosa</title>
+        <link rel="stylesheet" th:href="@{/assets/css/practica6.css}">
+    </head>
+    <body>
+        <main layout:fragment="main-content" class="perfil-container">
+            <aside class="sidebar">
+                <ul>
+                    <li><img th:src="@{/assets/images/areacliente/compras.png}" alt=""> <a th:href="@{/cliente/pedidos}"> COMPRAS REALIZADAS</a></li>
+                    <li><img th:src="@{/assets/images/areacliente/pedidosAnulados.png}" alt=""><a th:href="@{/cliente/pedidos/anulados}">PEDIDOS ANULADOS</a></li>
+                    <li><img th:src="@{/assets/images/areacliente/datos.png}" alt=""> DATOS PERSONALES</li>
+                    <li><img th:src="@{/assets/images/areacliente/favoritos.png}" alt=""> <a th:href="@{/cliente/pedidos}">FAVORITOS</a></li>
+                    <li><img th:src="@{/assets/images/areacliente/cerrarSesion.png}" alt=""> <a th:href="@{/auth/logout}">CERRAR SESIÓN</a></li>
+                </ul>
+            </aside>
+
+
+            <section class="pedido-detail">
+
+                <h1 class="page-title">
+                    Pedido <span th:text="${anulado.codigo}">Codigo</span>
+                </h1>
+
+                <div class="pedido-detail-container">
+                    <!-- Información y estado -->
+                    <div class="detail-header">
+                        <div class="detail-info">
+                            <p>
+                                <strong>Fecha:</strong>
+                                <span th:text="${#dates.format(anulado.fechacierre,'dd/MM/yyyy')}">  </span>
+                            </p>
+                            <p>
+                                <strong>Fecha anulación:</strong>
+                                <span th:text="${#dates.format(anulado.fechaanulacion,'dd/MM/yyyy')}"> </span>
+                            </p>
+
+                        </div>
+                        <div class="anulado-status">
+                            <p><strong>Estado:</strong></p>
+                                <span> ANULADO</span>
+
+                        </div>
+                    </div>
+
+                    <!-- Líneas de pedido -->
+                    <table class="pedido-lines">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Artículo</th>
+                                <th>Cantidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="l : ${anulado.lineas}">
+                                <td th:text="${l.codigo}">L001</td>
+                                <td th:text="${l.articulo.nombre}">Artículo X</td>
+                                <td th:text="${l.cantidad}">1</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    
+                </div>
+            </section>
+
+
+        </main>
+    </body>
+</html>

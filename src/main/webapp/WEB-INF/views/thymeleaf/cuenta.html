@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout}"
+      lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Perfil – PETRASA</title>
+        <link rel="stylesheet" th:href="@{/assets/css/practica6.css}">
+    </head>
+    <body>
+        <main layout:fragment="main-content" class="perfil-container">
+            <aside class="sidebar">
+                <ul>
+                    <li><img th:src="@{/assets/images/areacliente/compras.png}" alt=""> <a th:href="@{/cliente/pedidos}"> COMPRAS REALIZADAS</a></li>
+                    <li><img th:src="@{/assets/images/areacliente/pedidosAnulados.png}" alt=""><a th:href="@{/cliente/pedidos/anulados}">PEDIDOS ANULADOS</a></li>
+                    <li><img th:src="@{/assets/images/areacliente/datos.png}" alt=""> <a th:href="@{/cliente/avatar}">DATOS PERSONALES</a></li>
+                    <li><img th:src="@{/assets/images/areacliente/favoritos.png}" alt=""> <a th:href="@{/cliente/pedidos}">FAVORITOS</a></li>
+                    <li><img th:src="@{/assets/images/areacliente/cerrarSesion.png}" alt=""> <a th:href="@{/auth/logout}">CERRAR SESIÓN</a></li>
+                </ul>
+            </aside>
+
+            <section class="contenido">
+                <h1>Hola</h1>
+                <h2>BIENVENID@ <span th:text="${cliente.nombre}">Nombre del client4e</span></h2>
+
+                <div class="info-box">
+                    <p><strong>Código de cliente:</strong> <span th:text="${cliente.codigo}">260001-99</span></p>
+                    <p><strong>Usuario:</strong> <span th:text="${cliente.username}">cliente1</span></p>
+
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt...</p>
+                    <p>Lorem ipsum dolor sit amet consectetur adipiscing elit ornare nec eros, donec nostra natoque ad purus a habitant rutrum aliquam. </p>
+                    <p>Aliquam commodo euismod efficitur curabitur interdum phasellus faucibus ultrices elementum inceptos laoreet tellus, sit purus pellentesque ullamcorper gravida vivamus netus fringilla ex praesent. Lacinia dui bibendum imperdiet praesent ex lobortis odio mi penatibus consectetur volutpat tempus, per metus massa purus est quam mauris neque montes varius hac. Litora elementum mauris nulla nullam quis senectus fringilla ac gravida sed tincidunt pellentesque iaculis feugiat, velit porttitor dapibus viverra dui primis congue fusce risus natoque proin commodo tortor. Vehicula scelerisque inceptos quis nunc libero ultricies lobortis consectetur quam, vivamus cursus risus consequat ligula phasellus rhoncus placerat lorem, mollis suscipit bibendum sagittis lacinia suspendisse a proin.</p>
+
+                </div>
+            </section>
+        </main>
+    </body>
+</html>

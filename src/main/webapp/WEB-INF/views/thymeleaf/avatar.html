@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout}"
+      lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Datos personales – Electrosa</title>
+        <link rel="stylesheet" th:href="@{/assets/css/practica6.css}">
+    </head>
+    <body>
+        <main layout:fragment="main-content" class="perfil-container">
+            <aside class="sidebar">
+                <ul>
+                    <li><img th:src="@{/assets/images/areacliente/compras.png}" alt=""> <a th:href="@{/cliente/pedidos}"> COMPRAS REALIZADAS</a></li>
+                    <li><img th:src="@{/assets/images/areacliente/pedidosAnulados.png}" alt=""><a th:href="@{/cliente/pedidos/anulados}">PEDIDOS ANULADOS</a></li>
+                    <li><img th:src="@{/assets/images/areacliente/datos.png}" alt=""> DATOS PERSONALES</li>
+                    <li><img th:src="@{/assets/images/areacliente/favoritos.png}" alt=""> <a th:href="@{/cliente/pedidos}">FAVORITOS</a></li>
+                    <li><img th:src="@{/assets/images/areacliente/cerrarSesion.png}" alt=""> <a th:href="@{/auth/logout}">CERRAR SESIÓN</a></li>
+                </ul>
+            </aside>
+
+            <div class="container">
+                <h1>Datos personales</h1>
+
+                <!-- Mostrar avatar actual si existe -->
+                <div class="current-avatar" th:if="${clienteAvatar != null}">
+                    <p>Avatar actual:</p>
+                    <th:block th:if="${clienteAvatar.isRemoteURL()}">
+                        <img th:src="${clienteAvatar.imageSource}"
+                             alt="Avatar Gravatar"
+                             style="border-radius:50%; width:100px; height:100px;" />
+                    </th:block>
+                    <th:block th:unless="${clienteAvatar.isRemoteURL()}">
+                        <img th:src="@{/static/assets/avatar/{img}(img=${clienteAvatar.imageSource})}"
+                             alt="Avatar local"
+                             style="border-radius:50%; width:100px; height:100px;" />
+                    </th:block>
+                </div>
+
+                <!-- Formulario para subir nuevo avatar -->
+                <form class="form-cultured"
+                      method="post"
+                      th:action="@{/cliente/avatar}"
+                      enctype="multipart/form-data">
+                    <div class="control">
+                        <label for="file">Selecciona imagen:</label>
+                        <input type="file" id="file" name="file" accept="image/*" required />
+                    </div>
+                    <button class="btn-primary" type="submit">Subir imagen</button>
+                </form>
+
+                <!-- Enlace de vuelta a cuenta -->
+                <p>
+                    <a th:href="@{/cliente/cuenta}" class="btn-secondary">
+                        ← Volver a mis datos
+                    </a>
+                </p>
+            </div>
+
+        </main>
+    </body>
+</html>
+

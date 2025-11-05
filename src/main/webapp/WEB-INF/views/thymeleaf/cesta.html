@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Cesta – Electrosa</title>
+        <link rel="stylesheet" th:href="@{/assets/css/practica6.css}">
+    </head>
+    <body>
+
+        <main layout:fragment="main-content" class="perfil-container">
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <ul>
+                    <li><img th:src="@{/assets/images/areacliente/compras.png}"/><a th:href="@{/cliente/pedidos}">COMPRAS REALIZADAS</a></li>
+                    <li><img th:src="@{/assets/images/areacliente/pedidosAnulados.png}"/><a th:href="@{/cliente/pedidos/anulados}">PEDIDOS ANULADOS</a></li>
+                    <li><img th:src="@{/assets/images/areacliente/datos.png}"/><a th:href="@{/cliente/cuenta}">DATOS PERSONALES</a></li>
+                    <li><img th:src="@{/assets/images/areacliente/favoritos.png}"/><a th:href="@{/cliente/favoritos}">FAVORITOS</a></li>
+                    <li><img th:src="@{/assets/images/areacliente/cerrarSesion.png}"/><a th:href="@{/auth/logout}">CERRAR SESIÓN</a></li>
+                </ul>
+            </aside>
+
+            <!-- Contenido -->
+            <section class="general-content cesta-content">
+
+                <h1 class="page-title">Cesta</h1>
+                <div class="cart-actions">
+                    <a th:href="@{/catalogo}" class="banner-btn">SEGUIR COMPRANDO</a>
+                </div>
+
+                <div class="list">
+
+                    <!-- Vacía -->
+                    <div class="item empty"
+                         th:if="${cesta == null or cesta.lineas.isEmpty()}">
+                        <p>Tu cesta está vacía.</p>
+                    </div>
+
+                    <!-- Cada producto -->
+                    <div class="item"
+                         th:each="linea : ${cesta.lineas}"
+                         th:data-line-id="${linea.codigo}"
+                         th:data-update-url="@{/api/cesta/linea}">
+
+                        <div class="icon">
+                            <img th:src="@{/assets/images/store/{f}(f=${linea.articulo.foto})}"
+                                 th:alt="${linea.articulo.nombre}"/>
+                        </div>
+
+                        <div class="info">
+                            <div class="pedido-header">
+                                <h2 th:text="${linea.articulo.nombre}">Nombre del producto</h2>
+                            </div>
+                            <p>
+                                <span th:text="${linea.articulo.codigo}">1 x COD</span><br/>
+                                <small>(Precio unidad: <span th:text="${linea.precio} + '€'">0.00€</span>)</small>
+                            </p>
+                        </div>
+
+                        <div class="quantity">
+                            <label for="qty-[[${linea.codigo}]]">Cant:</label>
+                            <select id="qty-[[${linea.codigo}]]" class="line-qty">
+                                <option th:each="i : ${#numbers.sequence(0, linea.articulo.stock)}"
+                                        th:value="${i}"
+                                        th:text="${i}"
+                                        th:selected="${i == linea.cantidad}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="subtotal line-subtotal"
+                             th:text="${#numbers.formatDecimal(linea.precio * linea.cantidad,1,2)} + ' €'">
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Total siempre desde el controlador -->
+                <div class="total-line"
+                     th:if="${cesta != null and !cesta.lineas.isEmpty()}">
+                    <span>Total:</span>
+                    <span id="total-amount"
+                          th:text="${#numbers.formatDecimal(total,2,2)} + ' €'">
+                        0.00 €
+                    </span>
+                </div>
+
+
+                <div class="cart-actions">
+                    <!-- Nuevo botón para tramitar el pedido -->
+                    <a th:if="${cesta != null and !cesta.lineas.isEmpty()}"
+                       th:href="@{/cliente/cesta/realizar}"
+                       class="banner-btn">REALIZAR PEDIDO</a>
+                </div>
+
+            </section>
+        </main>
+    <th:block th:fragment="body-bottom">
+        <script th:src="@{/assets/js/practica9_cart.js}"></script>
+    </th:block>
+</body>
+</html>

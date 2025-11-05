@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}">
+    <head>
+        <title>Nuestro equipo - Electrosa</title>
+        <link rel="stylesheet" th:href="@{/assets/css/practica7.css}">
+
+    </head>
+    <body>
+        <main layout:fragment="main-content">
+            <div class = "error">
+                <h1 class="titleError">Acceso no autorizado</h1>
+                <div>
+                    [[ ${exception.message} ]]
+                </div>
+                <div class="line">
+                    <ion-icon name="close-outline"></ion-icon>
+                    <a th:href="@{/}">Salir de aquí</a>
+                </div> 
+            </div> 
+        </main>
+
+
+    </body>
+</html>
+

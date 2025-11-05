@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Confirmar Pedido – Electrosa</title>
+        <link rel="stylesheet" th:href="@{/assets/css/practica6.css}">
+    </head>
+    <body>
+        <main layout:fragment="main-content" class="envio-container">
+
+            <!-- Columna 1: Resumen de la cesta -->
+            <section class="direccion-envio">
+                <h3>ARTÍCULOS EN CESTA</h3>
+                <span th:text="${cesta.lineas.size()}">0</span>
+            </section>
+
+            <!-- Columna 2: Formulario de envío -->
+            <div class="formulario-envio">
+                <h1>Dirección de envío</h1>
+                <form id="deliveryForm"
+                      th:action="@{/cliente/cesta/realizar}"
+                      th:object="${pedidoForm}"
+                      method="post"
+                      class="delivery-form">
+
+                    <div class="form-group">
+                        <label for="calle">Dirección:</label>
+                        <input type="text" th:field="*{calle}" id="calle" placeholder="Paseo de Zorrilla, 103" required/>
+                        <div class="error" th:if="${#fields.hasErrors('calle')}" th:errors="*{calle}"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cp">Código Postal:</label>
+                        <input type="text" th:field="*{cp}" id="cp" placeholder="47002" pattern="\d{5}" required/>
+                        <div class="error" th:if="${#fields.hasErrors('cp')}" th:errors="*{cp}"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ciudad">Población:</label>
+                        <input type="text" th:field="*{ciudad}" id="ciudad" placeholder="Valladolid" required/>
+                        <div class="error" th:if="${#fields.hasErrors('ciudad')}" th:errors="*{ciudad}"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="provincia">Provincia:</label>
+                        <select th:field="*{provincia}" id="provincia" required>
+                            <option value="" disabled>-- Seleccione provincia --</option>
+                            <option value="Álava">Álava</option>
+                            <option value="Albacete">Albacete</option>
+                            <option value="Alicante">Alicante</option>
+                            <option value="Almería">Almería</option>
+                            <option value="Asturias">Asturias</option>
+                            <option value="Ávila">Ávila</option>
+                            <option value="Badajoz">Badajoz</option>
+                            <option value="Barcelona">Barcelona</option>
+                            <option value="Burgos">Burgos</option>
+                            <option value="Cáceres">Cáceres</option>
+                            <option value="Cádiz">Cádiz</option>
+                            <option value="Cantabria">Cantabria</option>
+                            <option value="Castellón">Castellón</option>
+                            <option value="Ciudad Real">Ciudad Real</option>
+                            <option value="Córdoba">Córdoba</option>
+                            <option value="A Coruña">A Coruña</option>
+                            <option value="Cuenca">Cuenca</option>
+                            <option value="Girona">Girona</option>
+                            <option value="Granada">Granada</option>
+                            <option value="Guadalajara">Guadalajara</option>
+                            <option value="Guipúzcoa">Guipúzcoa</option>
+                            <option value="Huelva">Huelva</option>
+                            <option value="Huesca">Huesca</option>
+                            <option value="Illes Balears">Illes Balears</option>
+                            <option value="Jaén">Jaén</option>
+                            <option value="La Rioja">La Rioja</option>
+                            <option value="Las Palmas">Las Palmas</option>
+                            <option value="León">León</option>
+                            <option value="Lleida">Lleida</option>
+                            <option value="Lugo">Lugo</option>
+                            <option value="Madrid">Madrid</option>
+                            <option value="Málaga">Málaga</option>
+                            <option value="Murcia">Murcia</option>
+                            <option value="Navarra">Navarra</option>
+                            <option value="Ourense">Ourense</option>
+                            <option value="Palencia">Palencia</option>
+                            <option value="Pontevedra">Pontevedra</option>
+                            <option value="Salamanca">Salamanca</option>
+                            <option value="Santa Cruz de Tenerife">Santa Cruz de Tenerife</option>
+                            <option value="Segovia">Segovia</option>
+                            <option value="Sevilla">Sevilla</option>
+                            <option value="Soria">Soria</option>
+                            <option value="Tarragona">Tarragona</option>
+                            <option value="Teruel">Teruel</option>
+                            <option value="Toledo">Toledo</option>
+                            <option value="Valencia">Valencia</option>
+                            <option value="Valladolid">Valladolid</option>
+                            <option value="Vizcaya">Vizcaya</option>
+                            <option value="Zamora">Zamora</option>
+                            <option value="Zaragoza">Zaragoza</option>
+                            <option value="Ceuta">Ceuta</option>
+                            <option value="Melilla">Melilla</option>
+                        </select>
+                        <div class="error" th:if="${#fields.hasErrors('provincia')}" th:errors="*{provincia}"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fechaEntregaDeseada">Fecha entrega deseada:</label>
+                        <input type="date" th:field="*{fechaEntregaDeseada}" id="fechaEntregaDeseada" required/>
+                        <div class="error" th:if="${#fields.hasErrors('fechaEntregaDeseada')}" th:errors="*{fechaEntregaDeseada}"></div>
+                    </div>
+
+                </form>
+            </div>
+
+            <!-- Columna 3: Acciones e información -->
+            <div class="acciones-form">
+                <button type="submit" form="deliveryForm" class="btn-guardar">GUARDAR Y TERMINAR</button>
+                <div class="info-extra">
+                    <p>Entrega express disponible</p>
+                    <p>Gastos de envío: 0€</p>
+                    <p>Artículos con 100 días de <a href="#">Satisfacción Garantizada</a>.</p>
+                </div>
+            </div>
+
+        </main>
+    </body>
+</html>
+

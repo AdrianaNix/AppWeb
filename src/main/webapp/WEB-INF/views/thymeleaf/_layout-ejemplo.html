@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Electrosa</title>
+
+
+        <link rel="stylesheet" th:href="@{/static/assets/ejemplo/reset.css}"/>
+        <link rel="stylesheet" th:href="@{/static/assets/ejemplo/electrosa.css}"/>
+        <script th:src="@{/static/assets/ejemplo/modernizr.js}"></script> 
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    </head>
+
+    <body>
+        <div class="container">
+            <header class="header">
+                <a th:href="@{/}" class="store-index-link">
+                    <h1 class="store-branding-logo">
+                        <span>ELECTROSA</span>
+                    </h1>
+                </a>
+            </header>
+            <aside class="left">
+                <nav class="main-menu">
+                    <ul>
+                        <li><a href="#">[[ #{menu.category.aspirator} ]]</a></li>
+                        <li><a href="#">[[ #{menu.category.fridge} ]]</a></li>
+                        <li><a href="#">[[ #{menu.category.washingmachine} ]]</a></li>
+                        <li><a href="#">[[ #{menu.category.stove} ]]</a></li>
+                    </ul>
+                </nav>
+            </aside>
+
+
+            <main layout:fragment="main-content" class="main">
+
+            </main>
+
+
+            <footer class="footer">
+                <a href="#">Programación de aplicaciones web - Universidad de La Rioja</a>
+            </footer>
+        </div>
+
+    </body>
+
+</html>

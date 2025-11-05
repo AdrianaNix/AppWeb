@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html layout:decorate="~{_layout-ejemplo}">
+    <head>
+        <title>Catálogo</title>
+    </head>
+    <body>
+        <main layout:fragment="main-content">
+
+            <h2>Marcas</h2>
+            <section class="card-layout">
+
+
+                <div th:each="fabricante,loop : ${fabricantes}" 
+                     class="card-layout__item clg-item"
+                     >
+                    <h3>[[ ${fabricante.nombre} ]]</h3>
+
+                    
+                    <a th:href="@{/marcas/{m}(m=${fabricante.nombre})}">Ver todos los productos de esta marca</a>
+
+                </div> <!-- #clg-item -->
+
+            </section>
+
+        </main>
+    </body>
+</html>

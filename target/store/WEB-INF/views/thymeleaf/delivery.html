@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Plazos de entrega – Electrosa</title>
+        <link rel="stylesheet" th:href="@{/assets/css/practica8_delivery.css}">    
+        <link rel="stylesheet"
+              href="https://uicdn.toast.com/chart/latest/toastui-chart.min.css" />
+    </head>
+    <body>
+        <main layout:fragment="main-content">
+
+            <section class="delivery">
+                <h1>Plazos de entrega</h1>
+                <p>Recibirás un enlace para realizar el seguimiento de tu envío tan pronto como salga de nuestros almacenes.</p>
+                <p>Nos comprometemos a que recibas tus productos lo antes posible. Una vez confirmado tu pedido, el tiempo estimado de entrega puede variar, pero garantizamos un plazo máximo dependiendo de tu ubicación:</p>
+                <ul>
+                    <li><strong>Envíos Península y Baleares:</strong> 4 días.</li>
+                    <li><strong>Envíos Islas Canarias:</strong> 7 días.</li>
+                    <li><strong>Envíos internacionales:</strong> 15 días.</li>
+                </ul>
+
+                <p>A continuación puedes observar nuestros tiempos de entrega medios del año pasado:</p>
+                <div id="chart" style="width:100%; height:400px;"></div>
+
+                <!-- Datos simulados para debug -->
+                <div th:each="stat : ${stats}" style="display:none;">
+                    (<span th:text="${stat.shippingRegion}"></span>)
+                    <span th:text="${stat.shippingAt}"></span> →
+                    <span th:text="${stat.deliveryAt}"></span> :
+                    <span th:text="${stat.transitTimeAsDays}"></span> días
+                </div>
+
+            </section>
+
+            <!-- Inyectamos la lista en JavaScript -->
+            <script th:inline="javascript">
+                /*<![CDATA[*/
+                let pedidoStats = /*[[${stats}]]*/ [];
+                /*]]>*/
+            </script>
+
+            <!-- TOAST UI Chart JS -->
+            <script src="https://uicdn.toast.com/chart/latest/toastui-chart.min.js"></script>
+            <!-- Script específico de la práctica -->
+            <script th:src="@{/assets/js/practica8_delivery.js}"></script>
+
+        </main>
+    </body>
+</html>
+

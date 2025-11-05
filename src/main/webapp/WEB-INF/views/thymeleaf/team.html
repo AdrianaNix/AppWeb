@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}">
+    <head>
+        <title>Nuestro equipo - Electrosa</title>
+        <link rel="stylesheet" th:href="@{/assets/css/team.css}">
+
+    </head>
+    <body>
+        <main layout:fragment="main-content">
+
+            <section class="team-section">
+                <div class="team-container">
+                    <!-- Tarjeta Izquierda -->
+                    <div class="team-card left">
+                        <img th:src="@{/assets/images/legacy/logo-electrosa-retro.png}" alt="Tormund Sand" class="profile-pic"/>
+                        <h3 class="name">TORMUND SAND</h3>
+                        <p class="role">Estudiante del Grado en Ingeniería Informática</p>
+                    </div>
+
+                    <!-- Contenido Principal -->
+                    <div class="team-content">
+                        <h1 class="title">Nuestro equipo</h1>
+                        <p class="description">
+                            You always say we should never stop being curious, to always open any curiosity door we find. 
+                            Why are you keeping this curiosity door locked?
+                        </p>
+                        <img th:src="@{/assets/images/team/olly-3767411.jpg}" alt="Curiosity" class="team-image"/>
+                    </div>
+
+                    <!-- Tarjeta Derecha -->
+                    <ul class="team-card skills">
+                        <li>
+                            <img th:src="@{/assets/images/team/linux.png}" alt="Linux" class="skill-icon"/>
+                             <div>
+                            <strong>LINUX USER</strong> 
+                            <p>Slackware, Debian, Ubuntu</p>
+                            </div>
+                        </li>
+                        <li>
+                            <img th:src="@{/assets/images/team/github.png}" alt="GitHub" class="skill-icon"/>
+                            <div>
+                            <strong>GITHUB</strong> 
+                            <p>@tormundsand</p> 
+                            </div>
+                        </li>
+                        <li>
+                            <img th:src="@{/assets/images/team/e.png}" alt="CSS" class="skill-icon"/>
+                            <div>
+                            <strong>CSS</strong> 
+                            <p>Nivel experto</p>
+                            </div>
+                        </li>
+                        <li>
+                            <img th:src="@{/assets/images/team/js.png}" alt="JavaScript" class="skill-icon"/>
+                            <div>
+                            <strong>JAVASCRIPT</strong> 
+                            <p>Empezando</p>
+                            </div>
+                        </li>
+                        <li>
+                            <img th:src="@{/assets/images/team/edu.png}" alt="Universidad" class="skill-icon"/>
+                            <div>
+                            <strong>CASI INGENIER@</strong> 
+                            <p>Universidad de La Rioja</p>
+                            </div>
+                            </li>
+                    </ul>
+
+                </div>
+            </section>
+        </main>
+
+
+    </body>
+</html>
+

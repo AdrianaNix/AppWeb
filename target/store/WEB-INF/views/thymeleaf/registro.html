@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Registro – Electrosa</title>
+        <link rel="stylesheet" th:href="@{/assets/css/practica7.css}">
+        <link rel="stylesheet" th:href="@{/assets/css/practica8.css}">
+
+    </head>
+    <body>
+        <main layout:fragment="main-content">
+
+            <div class="product-container">
+                <div class="container">
+                    <div class="product-box">
+
+                        <div class="product-featured">
+
+                            <h1 class="title">Área de clientes</h1>
+
+                            <th:block th:if="${not #lists.isEmpty(messages)}">
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        <li th:each="message : ${messages}">
+                                            [[${message}]]
+                                        </li>
+                                    </ul>
+                                </div>
+                            </th:block>
+
+                            <form class="form-cultured" th:action="@{/auth/register}" method="post" th:object="${registroForm}">
+                                <div class="showcase-wrapper">
+
+                                    <fieldset>
+                                        <legend>Datos del cliente</legend>
+
+                                        <div class="control">
+                                            <label for="email">Email:</label>
+                                            <input id="email" type="email" name="email"
+                                                   th:field="*{email}" required maxlength="100"/>
+                                        </div>
+
+                                        <div class="control">
+                                            <label for="username">Nombre de usuario:</label>
+                                            <input id="username" type="text" name="username"
+                                                   th:field="*{username}" required maxlength="50"/>
+                                        </div>
+
+                                        <div class="control">
+                                            <label for="password1">Contraseña:</label>
+                                            <input id="password1" type="password" name="password1"
+                                                   th:field="*{password1}" required maxlength="52" class="pwd-eye"/>
+                                            <a href="#" class="pwd-toggle">Mostrar contraseña<ion-icon name="eye"></ion-icon></a>
+
+
+                                        </div>
+
+                                        <div class="control">
+                                            <label for="password2">Repetir contraseña:</label>
+                                            <input id="password2" type="password" name="password2"
+                                                   th:field="*{password2}" required maxlength="52" class="pwd-eye"/>
+                                            <a href="#" class="pwd-toggle">Mostrar contraseña<ion-icon name="eye"></ion-icon></a>
+
+
+                                        </div>
+
+                                        <div class="control checkbox-group">
+                                            <input type="checkbox" id="acceptConditions"
+                                                   th:field="*{acceptConditions}"/>
+                                            <label for="acceptConditions">
+                                                He leído y acepto la
+                                                <a href="#" class="link">política de privacidad</a>
+                                            </label>
+                                        </div>
+
+                                        <div class="control submit-group">
+                                            <button type="submit" class="btn-primary">
+                                                Crear cuenta
+                                            </button>
+                                        </div>
+
+                                    </fieldset>
+                                </div>
+                            </form>
+
+                        </div>
+
+                    </div>
+
+                    <aside class="sidebar sidebar-boxd">
+                        <h3>Más información</h3>
+                        <div class="line">
+                            <ion-icon name="bookmark-outline"></ion-icon>
+                            <a href="#">Protección de datos</a>
+                        </div>
+                        <div class="line">
+                            <ion-icon name="bookmark-outline"></ion-icon>
+                            <a href="#">Términos de uso</a>
+                        </div>
+                        <div class="line">
+                            <ion-icon name="bookmark-outline"></ion-icon>
+                            <a href="#">Aviso legal</a>
+                        </div>
+                    </aside>
+
+                </div>
+            </div>
+
+        </main>
+    <th:block th:fragment="body-bottom">
+        <script th:src="@{/assets/js/practica8_password.js}"></script>
+    </th:block>
+</body>
+</html>

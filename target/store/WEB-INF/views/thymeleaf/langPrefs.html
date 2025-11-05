@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}">
+    <head>
+        <title th:text="#{lang.settings.title}">Preferencias de idioma</title>
+        <link rel="stylesheet" th:href="@{/assets/css/practica7.css}">
+
+    </head>
+    <body>
+        <main layout:fragment="main-content">
+            <div class="prefs-container">
+                <!-- Tarjeta de idioma actual -->
+                <div class="current-lang-card">
+                    <p>
+                        <strong>[[#{lang.settings.current}]]:</strong>
+                        <span th:text="${currentLang == 'es' ? 'español (es)' 
+                              : currentLang == 'en' ? 'english (en)' 
+                              : currentLang == 'fr' ? 'français (fr)' 
+                              : currentLang == 'de' ? 'deutsch (de)' 
+                              : currentLang }">español (es)</span>
+                    </p>
+                </div>
+
+                <!-- Formulario de cambio -->
+                <div class="prefs-form">
+                    <h1>[[#{lang.settings.title}]]</h1>
+                    <h3>[[#{lang.settings.change.title}]]</h3>
+                    <form th:action="@{/lang/prefs}" method="post">
+                        <label for="lang">[[#{lang.change}]]:</label>
+                        <select id="lang" name="lang" class="select-lang">
+                            <option th:value="'es'" th:text="#{lang.es}"
+                                    th:selected="${currentLang == 'es'}">Español</option>
+                            <option th:value="'en'" th:text="#{lang.en}"
+                                    th:selected="${currentLang == 'en'}">English</option>
+                            <option th:value="'fr'" th:text="#{lang.fr}"
+                                    th:selected="${currentLang == 'fr'}">Français</option>
+                            <option th:value="'de'" th:text="#{lang.de}"
+                                    th:selected="${currentLang == 'de'}">Deutsch</option>
+                        </select>
+                        <button type="submit" class="btn-apply">
+                            [[#{lang.settings.change.submit}]]
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </main>
+
+
+    </body>
+</html>
+

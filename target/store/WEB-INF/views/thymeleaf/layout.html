@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      lang="es">
+    <head>
+        <title th:text="${pageTitle}">Electrosa - PAW</title>
+
+        <meta charset="UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+        <link rel="apple-touch-icon" sizes="180x180" th:href="@{/assets/images/logo/apple-touch-icon.png}"/>
+        <link rel="icon" type="image/png" sizes="32x32" th:href="@{/assets/images/logo/favicon-32x32.png}"/>
+        <link rel="icon" type="image/png" sizes="16x16" th:href="@{/assets/images/logo/favicon-16x16.png}"/>
+
+        <link rel="stylesheet" th:href="@{/assets/css/style.css}"/>
+        <link rel="stylesheet" th:href="@{/assets/css/custom.css}"/>
+        <link rel="stylesheet" th:href="@{/assets/css/toast.css}"/>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com"/>
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+
+
+    </head>
+    <body class="h-100">
+        <!-- Definimos un fragmento "layout" que recibe un parámetro llamado "content" -->
+        <div class="overlay" data-overlay></div>
+        <div class="notification-toast"
+             data-toast id="notification-toast"
+             th:data-url="@{/api/compras/ultimo-articulo}">
+            <button class="toast-close-btn" data-toast-close>
+                <ion-icon name="close-outline"></ion-icon>
+            </button>
+            <div class="toast-banner">
+                <img th:src="@{/assets/images/happybag.png}"
+                     alt="Compra reciente">
+            </div>
+            <div class="toast-detail">
+                <p class="toast-message">Alguien acaba de comprar</p>
+                <p class="toast-title" id="toast-title"></p>
+                <p class="toast-meta">Hace un momento</p>
+            </div>
+        </div> <!--#notification-toast -->
+
+
+
+        <!-- HEADER -->
+        <header>
+            <div class="header-top">
+                <div class="container">
+                    <ul class="header-social-container">
+                        <li>
+                            <a href="#" class="social-link">
+                                <ion-icon name="logo-facebook"></ion-icon>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="social-link">
+                                <ion-icon name="logo-twitter"></ion-icon>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="social-link">
+                                <ion-icon name="logo-instagram"></ion-icon>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="social-link">
+                                <ion-icon name="logo-linkedin"></ion-icon>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="header-alert-news">
+                        <div id="news-banner"></div> <!-- Aquí se mostrará el mensaje del banner -->
+                    </div>
+
+                    <div class="header-top-actions">
+                        <select name="currency">
+                            <option value="eur">EUR &euro;</option>
+                            <option value="usd">USD &dollar;</option>
+                        </select>
+                        <form>
+                            <select name="lang" id="language-selector">
+                                <option value="es" th:text="#{lang.es}" th:selected="${#strings.
+                                        equals(#locale.toString(), 'es')}"></option>
+                                <option value="en" th:text="#{lang.en}" th:selected="${#strings.
+                                        equals(#locale.toString(), 'en')}"></option>
+                                <option value="fr" th:text="#{lang.fr}" th:selected="${#strings.
+                                        equals(#locale.toString(), 'fr')}"></option>
+                                <option value="de" th:text="#{lang.de}" th:selected="${#strings.
+                                        equals(#locale.toString(), 'de')}"></option>
+                            </select>
+                        </form>
+                        <a style="display:none;" href="/electrosa/i18n/lang">Cambiar preferencias</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="header-main">
+                <div class="container">
+                    <a href="/electrosa/" class="header-logo">
+                        <span>ELECTROSA</span>
+                    </a>
+                    <div class="header-search-container">
+                        <input type="search"
+                               name="search"
+                               class="search-field"
+                               th:placeholder="#{search.entireSite}"
+                               placeholder="Buscar en toda la tienda"/>
+                        <button class="search-btn">
+                            <ion-icon name="search-outline"></ion-icon>
+                        </button>
+                    </div>
+
+                    <div class="header-user-actions">
+
+                        <a th:href="@{/cliente/cuenta}" class="action-btn">
+                            <!-- Si no hay avatar o es el default -->
+                            <th:block th:if="${session.clienteAvatar == null or session.clienteAvatar.isDefault()}">
+                                <ion-icon name="person-outline"></ion-icon>
+                            </th:block>
+
+                            <!-- Si hay avatar -->
+                            <th:block th:unless="${session.clienteAvatar == null or session.clienteAvatar.isDefault()}">
+                                <th:block th:if="${session.clienteAvatar.isRemoteURL()}">
+                                    <img th:src="${session.clienteAvatar.imageSource}"
+                                         style="border-radius:50%; height:36px;" />
+                                </th:block>
+                                <th:block th:if="${!session.clienteAvatar.isRemoteURL()}">
+                                    <img th:src="@{/assets/avatar/{img}(img=${session.clienteAvatar.imageSource})}"
+                                         style="border-radius:50%; height:36px;" />
+                                </th:block>
+                            </th:block>
+                        </a>
+                        <a href="/electrosa/cliente/wishlist" class="action-btn">
+                            <ion-icon name="heart-outline"></ion-icon>
+                            <span class="count" id="wishlist-count">0</span>
+                        </a>
+
+
+                        <a th:href="@{/cliente/cesta}" class="action-btn">
+                            <ion-icon name="bag-handle-outline"></ion-icon>
+                            <span th:if="${session.cesta != null}" class="count">
+                                [[ ${#lists.size(session.cesta?.lineas)} ]]
+                            </span>
+                            <span th:if="${session.cesta == null}" class="count">0</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <nav class="desktop-navigation-menu">
+
+                <div class="container">
+                    <ul class="desktop-menu-category-list">
+                        <li class="menu-category">
+                            <a href="/electrosa/" class="menu-title">Home</a>
+                        </li>
+                        <li class="menu-category">
+                            <a th:href="@{/catalogo/?family=aspiradores}"
+                               class="menu-title"
+                               th:text="#{menu.category.aspirator}">Aspiradores</a>
+                        </li>
+                        <li class="menu-category">
+                            <a th:href="@{/catalogo/?family=frigorificos}"
+                               class="menu-title"
+                               th:text="#{menu.category.fridge}">Frigoríficos</a>
+                        </li>
+                        <li class="menu-category">
+                            <a th:href="@{/catalogo/?family=lavadoras}"
+                               class="menu-title"
+                               th:text="#{menu.category.washingmachine}">Lavadoras</a>
+                        </li>
+                        <li class="menu-category">
+                            <a th:href="@{/catalogo/?family=cocinas}"
+                               class="menu-title"
+                               th:text="#{menu.category.stove}">Cocinas</a>
+                        </li>
+                        <li class="menu-category">
+                            <a th:href="@{/blog/}"
+                               class="menu-title"
+                               th:text="#{menu.category.blog}">Blog</a>
+                        </li>
+                        <li class="menu-category">
+                            <a th:href="@{/catalogo/ofertas}"
+                               class="menu-title"
+                               th:text="#{menu.category.sales}">Ofertas</a>
+                        </li>
+                    </ul>
+                </div>
+
+
+
+            </nav>
+
+            <div class="mobile-bottom-navigation">
+                <button class="action-btn" data-mobile-menu-open-btn>
+                    <ion-icon name="menu-outline"></ion-icon>
+                </button>
+                <button class="action-btn">
+                    <ion-icon name="bag-handle-outline"></ion-icon>
+                    <span class="count">0</span>
+                </button>
+                <button class="action-btn">
+                    <ion-icon name="home-outline"></ion-icon>
+                </button>
+                <button class="action-btn">
+                    <ion-icon name="heart-outline"></ion-icon>
+                    <span class="count">0</span>
+                </button>
+                <button class="action-btn" data-mobile-menu-open-btn>
+                    <ion-icon name="grid-outline"></ion-icon>
+                </button>
+            </div>
+
+            <nav class="mobile-navigation-menu has-scrollbar" data-mobile-menu>
+                <div class="menu-top">
+                    <h2 class="menu-title">Menu</h2>
+                    <button class="menu-close-btn" data-mobile-menu-close-btn>
+                        <ion-icon name="close-outline"></ion-icon>
+                    </button>
+                </div>
+                <ul class="mobile-menu-category-list">
+                    <li class="menu-category">
+                        <a href="#" class="menu-title">Aspiradores</a>
+                    </li>
+                    <li class="menu-category">
+                        <a href="#" class="menu-title">Frigoríficos</a>
+                    </li>
+                    <li class="menu-category">
+                        <a href="#" class="menu-title">Lavadoras</a>
+                    </li>
+                    <li class="menu-category">
+                        <a href="#" class="menu-title">Cocinas</a>
+                    </li>
+                    <li class="menu-category">
+                        <a href="#" class="menu-title">Blog</a>
+                    </li>
+                    <li class="menu-category">
+                        <a href="#" class="menu-title">Ofertas</a>
+                    </li>
+                </ul>
+                <div class="menu-bottom">
+                    <ul class="menu-category-list">
+                        <li class="menu-category">
+                            <button class="accordion-menu" data-accordion-btn>
+                                <p class="menu-title">Language</p>
+                                <ion-icon name="caret-back-outline" class="caret-back"></ion-icon>
+                            </button>
+                            <ul class="submenu-category-list" data-accordion>
+                                <li class="submenu-category">
+                                    <a href="#" class="submenu-title">English</a>
+                                </li>
+                                <li class="submenu-category">
+                                    <a href="#" class="submenu-title">Espa&ntilde;ol</a>
+                                </li>
+                                <li class="submenu-category">
+                                    <a href="#" class="submenu-title">Fren&ccedil;h</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="menu-category">
+                            <button class="accordion-menu" data-accordion-btn>
+                                <p class="menu-title">Currency</p>
+                                <ion-icon name="caret-back-outline" class="caret-back"></ion-icon>
+                            </button>
+                            <ul class="submenu-category-list" data-accordion>
+                                <li class="submenu-category">
+                                    <a href="#" class="submenu-title">USD &dollar;</a>
+                                </li>
+                                <li class="submenu-category">
+                                    <a href="#" class="submenu-title">EUR &euro;</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="menu-social-container">
+                        <li>
+                            <a href="#" class="social-link">
+                                <ion-icon name="logo-facebook"></ion-icon>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="social-link">
+                                <ion-icon name="logo-twitter"></ion-icon>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="social-link">
+                                <ion-icon name="logo-instagram"></ion-icon>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="social-link">
+                                <ion-icon name="logo-linkedin"></ion-icon>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <!-- AREA DE CONTENIDO DINÁMICO -->
+        <main layout:fragment="main-content" class="main">
+
+        </main>
+
+        <!-- FOOTER -->
+        <!-- FOOTER -->
+        <footer th:lang="${#locale.language}">
+            <div class="footer-nav">
+                <div class="container">
+
+                    <!-- Sobre Electrosa -->
+                    <ul class="footer-nav-list">
+                        <li class="footer-nav-item">
+                            <h2 class="nav-title" th:text="#{footer.about.title}">Sobre Electrosa</h2>
+                        </li>
+                        <li class="footer-nav-item">
+                            <a th:href="@{/info/donde-estamos}"
+                               class="footer-nav-link"
+                               th:text="#{footer.about.where}">Dónde estamos</a>
+                        </li>
+                        <li class="footer-nav-item">
+                            <a th:href="@{/about/team}"
+                               class="footer-nav-link"
+                               th:text="#{footer.about.team}">Nuestro equipo</a>
+                        </li>
+                        <li class="footer-nav-item">
+                            <a th:href="@{#}"
+                               class="footer-nav-link"
+                               th:text="#{footer.about.careers}">Trabaja con nosotros</a>
+                        </li>
+                    </ul>
+
+                    <!-- Información -->
+                    <ul class="footer-nav-list">
+                        <li class="footer-nav-item">
+                            <h2 class="nav-title" th:text="#{footer.info.title}">Información</h2>
+                        </li>
+                        <li class="footer-nav-item">
+                            <a th:href="@{#}"
+                               class="footer-nav-link"
+                               th:text="#{footer.info.trackOrder}">Seguir pedido</a>
+                        </li>
+                        <li class="footer-nav-item">
+                            <a th:href="@{/about/delivery}"
+                               class="footer-nav-link"
+                               th:text="#{footer.info.delivery}">Plazos de entrega</a>
+                        </li>
+                        <li class="footer-nav-item">
+                            <a th:href="@{/marcas}"
+                               class="footer-nav-link"
+                               th:text="#{footer.info.brands}">Marcas</a>
+                        </li>
+                        <li class="footer-nav-item">
+                            <a th:href="@{#}"
+                               class="footer-nav-link"
+                               th:text="#{footer.info.payment}">Formas de pago</a>
+                        </li>
+                    </ul>
+
+                    <!-- Servicios -->
+                    <ul class="footer-nav-list">
+                        <li class="footer-nav-item">
+                            <h2 class="nav-title" th:text="#{footer.services.title}">Servicios</h2>
+                        </li>
+                        <li class="footer-nav-item">
+                            <a th:href="@{#}"
+                               class="footer-nav-link"
+                               th:text="#{footer.services.card}">Tarjeta PAW</a>
+                        </li>
+                        <li class="footer-nav-item">
+                            <a th:href="@{#}"
+                               class="footer-nav-link"
+                               th:text="#{footer.services.finance}">Financiación de compras</a>
+                        </li>
+                        <li class="footer-nav-item">
+                            <a th:href="@{#}"
+                               class="footer-nav-link"
+                               th:text="#{footer.services.returns}">Devoluciones</a>
+                        </li>
+                        <li class="footer-nav-item">
+                            <a th:href="@{#}"
+                               class="footer-nav-link"
+                               th:text="#{footer.services.sitemap}">Mapa del sitio</a>
+                        </li>
+                    </ul>
+
+                    <!-- Extras -->
+                    <ul class="footer-nav-list">
+                        <li class="footer-nav-item">
+                            <h2 class="nav-title" th:text="#{footer.extras.title}">Extras</h2>
+                        </li>
+                        <li class="footer-nav-item">
+                            <a th:href="@{#}" class="footer-nav-link" th:text="#{footer.extras.blog}">Blog</a>
+                        </li>
+                        <li class="footer-nav-item">
+                            <a th:href="@{#}" class="footer-nav-link" th:text="#{footer.extras.energy}">Etiquetado energético</a>
+                        </li>
+                        <li class="footer-nav-item">
+                            <a th:href="@{#}" class="footer-nav-link" th:text="#{footer.extras.cookies}">Política de cookies</a>
+                        </li>
+                        <li class="footer-nav-item">
+                            <a th:href="@{#}" class="footer-nav-link" th:text="#{footer.extras.privacy}">Política de privacidad</a>
+                        </li>
+                    </ul>
+
+                    <!-- Contacto -->
+                    <ul class="footer-nav-list">
+                        <li class="footer-nav-item">
+                            <h2 class="nav-title" th:text="#{footer.contact.title}">Contacto</h2>
+                        </li>
+                        <li class="footer-nav-item flex">
+                            <div class="icon-box">
+                                <ion-icon name="location-outline"></ion-icon>
+                            </div>
+                            <address class="content">
+                                <span th:text="#{footer.contact.line1}">Facultad de Ciencia y Tecnología</span><br/>
+                                <span th:text="#{footer.contact.line2}">Edificio CCT</span><br/>
+                                <span th:text="#{footer.contact.line3}">C/ Madre de Dios, 53</span><br/>
+                                <span th:text="#{footer.contact.line4}">26006 Logroño (La Rioja)</span>
+                            </address>
+                        </li>
+                        <li class="footer-nav-item flex">
+                            <div class="icon-box">
+                                <ion-icon name="call-outline"></ion-icon>
+                            </div>
+                            <a href="tel:+34 941001002" class="footer-nav-link">941 001 002</a>
+                        </li>
+                    </ul>
+
+                    <!-- Redes sociales -->
+                    <ul class="footer-nav-list">
+                        <li class="footer-nav-item">
+                            <h2 class="nav-title" th:text="#{footer.social.title}">Redes sociales</h2>
+                        </li>
+                        <li>
+                            <ul class="social-link">
+                                <li class="footer-nav-item">
+                                    <a th:href="@{#}" class="footer-nav-link">
+                                        <ion-icon name="logo-facebook"></ion-icon>
+                                    </a>
+                                </li>
+                                <li class="footer-nav-item">
+                                    <a th:href="@{#}" class="footer-nav-link">
+                                        <ion-icon name="logo-twitter"></ion-icon>
+                                    </a>
+                                </li>
+                                <li class="footer-nav-item">
+                                    <a th:href="@{#}" class="footer-nav-link">
+                                        <ion-icon name="logo-linkedin"></ion-icon>
+                                    </a>
+                                </li>
+                                <li class="footer-nav-item">
+                                    <a th:href="@{#}" class="footer-nav-link">
+                                        <ion-icon name="logo-instagram"></ion-icon>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+
+            <!-- Footer bottom -->
+            <div class="footer-bottom">
+                <div class="container">
+                    <p th:text="#{footer.bottom.course}">
+                        Programación de aplicaciones web - Universidad de La Rioja
+                    </p>
+                    <p class="copyright"
+                       th:text="#{footer.bottom.love}">
+                        ♥ Crafted with love
+                    </p>
+                </div>
+            </div>
+        </footer>
+
+
+        <!-- Scripts -->
+        <script th:src="@{/assets/js/script.js}"></script>
+        <script th:src="@{/assets/js/practica8_language.js}"></script>
+        <script th:src="@{/assets/js/practica9_news.js}"></script>
+        <script th:src="@{/assets/js/practica9_toast.js}"></script>
+        <script th:src="@{/assets/js/practica8_wishlist.js}"></script>
+
+
+        <script type="module" th:src="@{'https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js'}"></script>
+        <script nomodule th:src="@{'https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js'}"></script>
+
+
+        <div layout:insert="~{::scripts}"></div>
+        <th:block th:replace="~{:: body-bottom} ?: _"></th:block>
+
+
+    </body>
+</html>

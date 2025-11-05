@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+      lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Pedido – Electrosa</title>
+        <link rel="stylesheet" th:href="@{/assets/css/practica6.css}">
+    </head>
+    <body>
+        <main layout:fragment="main-content" class="perfil-container">
+
+            <!-- Toast notification -->
+            <div id="toast"
+                 th:if="${msgOk}"
+                 class="toast"
+                 th:text="${msgOk}">
+            </div>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <ul>
+                    <li>
+                        <img th:src="@{/assets/images/areacliente/compras.png}" alt="">
+                        <a th:href="@{/cliente/pedidos}">COMPRAS REALIZADAS</a>
+                    </li>
+                    <li>
+                        <img th:src="@{/assets/images/areacliente/pedidosAnulados.png}" alt="">
+                        <a th:href="@{/cliente/pedidos/anulados}">PEDIDOS ANULADOS</a>
+                    </li>
+                    <li>
+                        <img th:src="@{/assets/images/areacliente/datos.png}" alt="">
+                        <a th:href="@{/cliente/cuenta}">DATOS PERSONALES</a>
+                    </li>
+                    <li>
+                        <img th:src="@{/assets/images/areacliente/favoritos.png}" alt="">
+                        <a th:href="@{/cliente/favoritos}">FAVORITOS</a>
+                    </li>
+                    <li>
+                        <img th:src="@{/assets/images/areacliente/cerrarSesion.png}" alt="">
+                        <a th:href="@{/auth/logout}">CERRAR SESIÓN</a>
+                    </li>
+                </ul>
+            </aside>
+
+            <!-- Detalle de pedido -->
+            <section class="pedido-detail">
+                <h1 class="page-title">
+                    Pedido <span th:text="${pedido.codigo}">P000010-25</span>
+                </h1>
+                <div class="pedido-detail-container">
+                    <!-- Información y estado -->
+                    <div class="detail-header">
+                        <div class="detail-info">
+                            <p><strong>Fecha:</strong>
+                                <span th:text="${#dates.format(pedido.fechacierre,'dd/MM/yyyy')}">23/03/2025</span>
+                            </p>
+                            <p><strong>Dirección de entrega:</strong></p>
+                            <p th:text="${pedido.direccion.calle}">Calle Falsa 123</p>
+                            <p th:text="${pedido.direccion.ciudad}">Ciudad</p>
+                            <p th:text="|${pedido.direccion.cp} (${pedido.direccion.provincia})|">28080 (Madrid)</p>
+                        </div>
+                        <div class="detail-status">
+                            <p><strong>Estado:</strong></p>
+                            <p>
+                                <span th:text="${pedido.cursado==0 ? 'PENDIENTE' : 'COMPLETADO'}">PENDIENTE</span>
+                            </p>
+                            <form th:action="@{/cliente/pedidos/{c}/anular(c=${pedido.codigo})}"
+                                  method="post" style="display:inline">
+                                <button type="submit" class="btn-cancel">ANULAR PEDIDO</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Líneas de pedido -->
+                    <table class="pedido-lines">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Artículo</th>
+                                <th>Cantidad</th>
+                                <th>Precio</th>
+                                <th>Fecha entrega</th>
+                                <th>Fecha recepción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="linea : ${pedido.lineas}">
+                                <td th:text="${linea.articulo.codigo}">Ede-341FO</td>
+                                <td>
+                                    <span th:text="${linea.articulo.nombre}">Frigorífico X</span>
+                                </td>
+                                <td th:text="${linea.cantidad}">1</td>
+                                <td th:text="${linea.precioReal} + ' €'">669.5 €</td>
+                                <td th:text="${#dates.format(linea.fechaEntregaPrevista,'dd/MM/yyyy')}">25/04/2025</td>
+                                <td th:text="${linea.fechaRecepcion != null
+                                    ? #dates.format(linea.fechaRecepcion,'dd/MM/yyyy')
+                                    : ''}">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Total -->
+                    <div class="pedido-total">
+                        <p>
+                            Importe total:
+                            <span th:text="${pedido.importe} + '€'">1332.50€</span>
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Toast fadeout script -->
+            <script th:inline="javascript">
+                /*<![CDATA[*/
+                document.addEventListener('DOMContentLoaded', function () {
+                    var toast = document.getElementById('toast');
+                    if (toast) {
+                        // tras 3 s, le aplicamos la clase .hide para hacer fade‐out
+                        setTimeout(function () {
+                            toast.classList.add('hide');
+                        }, 3000);
+                    }
+                });
+                /*]]>*/
+            </script>
+        </main>
+
+
+
+    </body>
+</html>
